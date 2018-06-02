@@ -1,33 +1,23 @@
-### Section X
-```plantuml
-@startuml
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+# Hana
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
-@enduml
-```
+## Visión general
 
-```plantuml
-@startuml
-skinparam monochrome false
-skinparam DefaultFontColor #008770
-skinparam ArrowColor #008770
-skinparam DefaultBorderColor #008770
-start
+## Resumen instancias
 
-if () then (yes)
-  fork
-	:Treatment 1;
-  fork again
-	:Treatment 2;
-  end fork
-else (monoproc)
-  note left: this is a first note
-  :Treatment 1;
-  :Treatment 2;
-endif
+## Proyecto inicial
 
-@enduml
-```
+> tonis, an awesome project tonis
+
+
+# Vue demo principal
+
+<div>hello {{ msg }}</div>
+
+<script>
+  new Vue({
+    el: '#main',
+    data: { msg: 'Vue' }
+  })
+</script>
+
+!> In a Markdown file, only the script within the first script tag is executed.
