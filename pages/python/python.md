@@ -54,7 +54,7 @@ Podemos activar el entorno virtual con:
 
 
 
-## Activar SSL sobre Bottle.
+## SSL sobre Bottle.
 Bottle utiliza no tiene soporte para **SSL**, pero permite utilizar otras implementaciones de **WSGI**. A continuación mostramos un ejemplo de como utilizar **cheroot** (utilizado por **CherryPy**) para habilitar la comunicación **SSL**.
 
 Requiere la instalación del módulo python correspondiente. 
