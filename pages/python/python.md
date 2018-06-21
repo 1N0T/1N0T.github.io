@@ -47,3 +47,73 @@ Podemos activar el entorno virtual con:
 ```bash
 . venv/bin/activate
 ```
+
+
+
+
+
+
+
+## Activar SSL sobre Bottle.
+Bottle utiliza no tiene soporte para **SSL**, pero permite utilizar otras implementaciones de **WSGI**. A continuación mostramos un ejemplo de como utilizar **cheroot** (utilizado por **CherryPy**) para habilitar la comunicación **SSL**.
+
+Requiere la instalación del módulo python correspondiente. 
+
+```bash
+sudo pip install cheroot
+```
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import ssl
+import os
+
+from cheroot.ssl.builtin import BuiltinSSLAdapter
+from bottle              import route, abort, error, response, run, redirect, request, static_file, ServerAdapter
+from cheroot             import wsgi
+
+
+# Configuramos directorios.
+BASE_DIR   = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+
+# Mapeamos el contenido estático.
+@route('/')
+def recursos():
+    return static_file('index.html', root = BASE_DIR)
+
+@route('/static/<fichero:path>')
+def recursos(fichero):
+    return static_file(fichero, root = STATIC_DIR)
+
+
+# Creamos un servidor cheroot SSL con el que iniciaremos Bottle (en lugar del
+# servidor por defecto que no soporta SSL y tiene peor rendimiento).
+# cheroot es el servidor utilizado por CherryPy.
+class ServidorSSL(ServerAdapter):
+
+    def run(self, handler):
+        servidor = wsgi.Server((self.host, self.port), handler)
+        # Los parámetros que recibe son: 
+        #     La clave pública.
+        #     La clave privada.
+        #     La cadena de certificación (este parámetro es opcional)
+        servidor.ssl_adapter = BuiltinSSLAdapter("clavePublica.crt", "clavePrivada.key", "cadenaDeCertificados.crt")
+
+        # Deshabilitamos los protocolos más antiguos. Sólo permitimos TLSv1.2
+        servidor.ssl_adapter.context.options |= ssl.OP_NO_TLSv1
+        servidor.ssl_adapter.context.options |= ssl.OP_NO_TLSv1_1
+
+        try:
+            servidor.start()
+        finally:
+            servidor.stop()
+
+
+# Iniciamos el servidor WEB.
+if __name__ == "__main__":
+    run(host="0.0.0.0", port=4443, server=ServidorSSL)
+
+```
