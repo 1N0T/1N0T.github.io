@@ -36,7 +36,7 @@ A menudo nos encontramos que hemos estando trabajando en una prueba de concepto,
     `git commit -m "Commit inicial"`
   
   * Añadimos la referencia a nuestro proyecto remoto de GitHub y que identificaremos como **origin**.
-
+  
     `git remote add origin https://github.com/MiUsuario/MiProyecto.git`
 
   * Importamos a nuestro proyecto local, los ficheros de la rama **master**, del proyecto remoto que no existen (licencia y readme).
@@ -56,3 +56,15 @@ A menudo nos encontramos que hemos estando trabajando en una prueba de concepto,
     `git commit -m "Excluir ficheros innecesarios"`
 
     `git push -u origin master`
+
+## Clonar repositorio sin historial de commits.
+En algunas ocasiones, nos interesa clonar un repositório, pero no queremos que se arrastre el historial de modificaciones. Tal vez hemos guardado contraseñas en los commits iniciales, que no nos interesa que se conozcan.
+
+Es posible indicar el número de commits que queremos que se dupliquen:
+
+`git clone --depth <depth> -b <branch> <repo_url>`
+
+* Donde **depth** es el número de commits a copiar (serái 1 si sólo queremos el último).
+* **branch** es el nombre de la rama a clonar.
+* Y **repo_url** la URL identificativa del repositorio a copiar.
+ 
