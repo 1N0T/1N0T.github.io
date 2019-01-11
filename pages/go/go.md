@@ -10,7 +10,7 @@ Los programas instalados con **snap** se depositan en los siguientes directorios
 /snap/<snapname>/current    - Enlace simbólica a la versión actual.
 ```
 ## Hola mundo !!!
-```
+```go
 package main
 import "fmt"
 
