@@ -15,6 +15,19 @@ La salida del comando, la copiamos y la ejecutamos en cada uno de los nodos que 
 
 ## Visulizar los nodos del cluster.
 ```bash
-docker swarm ls
+docker node ls
+```
+
+## Crear redes virtuales.
+```bash
+docker network create --driver overlay miRedVirtual
+```
+Esto crea una especie de **VLAN** llamada **miRedVirtual**. Podemos visualizar las redes disponibles con
+```
+docker network ls
+```
+Podemos conectar caontainers a la red especificando su nombre. Los servicios conectados a la misma VLAN, se pueden comunicar entre ellos utilizando el nombre del servicio (como si fuera su nombre DNS).
+```bash
+docker service create --name psql --network miRedVirtual -e POSTGRES_PASSWORD=miContraseña postgres
 ```
 
