@@ -30,6 +30,15 @@ virtualenv -p python3 venv
 source venv/bin/activate
 ```
 
+En **python 3**, en lugar de virtualenv, podemos utilizar el módulo **venv**-
+
+```bash
+mkdir myproject
+cd myproject
+python3 -m venv venv
+source venv/bin/activate
+```
+
 Ya podemos proceder a instalar los paquetes que nos interesen.
 ```bash
 pip3 install jupyter
