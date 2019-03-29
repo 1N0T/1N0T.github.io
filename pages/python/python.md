@@ -39,7 +39,7 @@ virtualenv -p python3 venv
 source venv/bin/activate
 ```
 
-En **python 3**, en lugar de virtualenv, podemos utilizar el módulo **venv**-
+En **python 3**, en lugar de virtualenv, podemos utilizar el módulo **venv**.
 
 ```bash
 mkdir myproject
