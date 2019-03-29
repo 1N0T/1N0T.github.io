@@ -1,10 +1,10 @@
 ## Pip en familia debian.
 Para intalar **pip** para **python 2.x**
-```
+```bash
 sudo apt install python-pip
 ```
 Para intalar **pip3** para **python 3.x**
-```
+```bash
 sudo apt install python3-pip
 ```
 
