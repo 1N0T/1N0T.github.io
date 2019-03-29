@@ -1,3 +1,12 @@
+## Pip en familia debian.
+Para intalar **pip** para **python 2.x**
+```
+sudo apt install python-pip
+```
+Para intalar **pip3** para **python 3.x**
+```
+sudo apt install python3-pip
+```
 
 ## Virtualenv en familia debian.
 Para evitar el conflicto entre diferentes versiones de librerías necesarias para nuestros proyectos python, utilizaremos **virtualenv**. Para instalarlo, tenemos que seguir los siguientes pasos:
