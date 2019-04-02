@@ -1,0 +1,69 @@
+@keyframes aparece-izquierda {
+   from { transform: translateX(-100%); }
+   to { transform: translateX(0%); }
+}
+
+@keyframes aparece {
+   from { opacity: 0; }
+   to { opacity: 1; }
+}
+
+@keyframes desaparece {
+   from { opacity: 1; }
+   to { opacity: 0; }
+}
+
+.desaparece {
+   animation-name: desaparece;
+   animation-duration: 1s;
+   animation-timing-function: ease-in;
+   animation-fill-mode: forwards;   
+}
+
+
+#logoinicial {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    animation: aparece-izquierda ease 2s backwards; 
+}
+
+#logofinal {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100%; 
+    animation: aparece ease 2s backwards 3s; 
+}
+#logoanimado {
+   display: block;
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%; 
+}
+
+#contenido {
+   margin-top: 6%;
+   display: none;
+}
+
+body{
+   overflow: hidden; 
+}
+.FixedHeightContainer {
+   margin-top: 6%;   
+   height: 100vh;   
+   padding-left: 3%; 
+   padding-right: 3px; 
+   overflow: auto;
+}
+#Content{
+   display: none;
+   height: 100%;
+   overflow: auto;
+}
