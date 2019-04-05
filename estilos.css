@@ -57,7 +57,7 @@ body{
    overflow: hidden; 
 }
 .FixedHeightContainer {
-   margin-top: 6%;   
+   margin-top: 5vw;   
    height: 100vh;   
    padding-left: 3%; 
    padding-right: 3px; 
