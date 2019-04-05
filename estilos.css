@@ -68,6 +68,6 @@ body{
    height: 100%;
    overflow: auto;
 }
-.search {
-       z-index: 90;
+aside.sidebar {
+   margin-top: 5vw;   
 }
