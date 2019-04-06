@@ -72,5 +72,5 @@ aside.sidebar {
    margin-top: 5vw;   
 }
 section.content {
-   margin-top: 5vw !important;   
+   top: 5vw !important;   
 }
