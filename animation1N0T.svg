@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%">
+    <image width="100%" height="100%" x="0" y="0" opacity="1" xlink:href="logoInicial_animated.svg">
+        <animate id="img1" attributeName="opacity" begin="3s" dur="3s" values="1;0" fill="freeze"/>
+    </image>
+    <image id="img2" width="100%" height="100%" x="0" y="0" opacity="0" xlink:href="logoFinal.svg">
+        <animate id="img2" attributeName="opacity" begin="2.5s" dur="2s" values="0;1" fill="freeze"/>
+    </image>
+</svg>
