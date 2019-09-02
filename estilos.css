@@ -20,16 +20,6 @@
    animation-fill-mode: forwards;   
 }
 
-
-#logoinicial {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    animation: aparece-izquierda ease 2s backwards; 
-}
-
 #logofinal {
     display: block;
     position: fixed;
@@ -38,14 +28,7 @@
     z-index: 50;
     pointer-events: none;
     width: 100%; 
-    height: 100%;
-}
-#logoanimado {
-   display: block;
-   position: absolute;
-   top: 0;
-   left: 0;
-   width: 100%; 
+    height: auto%;
 }
 
 #contenido {
