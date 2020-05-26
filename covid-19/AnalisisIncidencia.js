@@ -59,7 +59,8 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
         dataentry: null,
         datalabel: "Positius (PCR + tests ràpids)",
         labels: [],
-        dataset: []
+        dataset: [],
+        ultima_fecha: null
       }
 
     },
@@ -92,6 +93,7 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
       cargarMunicipio(municipio) {
         let fechaEsperada = ""
         let fechaActual = ""
+        let fechaControl = ""
         let condicion = ""
 
         if (municipio == "(Total Catalunya)") {
@@ -112,14 +114,33 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
             if (fechaEsperada == "") {
                fechaEsperada = fechaActual
             }
+            // añadimos un registro con 0 por cada día para los cuales no existen valores, entre la última
+            // fecha con valor y la fecha del valor actual
             while (date_diff_indays(fechaActual, fechaEsperada)) {
               this.labels.push(fechaEsperada.getFullYear() + "-" + this.ceros(fechaEsperada.getMonth(), 2) + "-" + this.ceros(fechaEsperada.getDate(), 2))
               this.dataset.push(0)
               fechaEsperada.setDate(fechaEsperada.getDate()+1);
+              fechaControl = fechaActual
             }
             this.labels.push(element.data.substring(0, 10))
             this.dataset.push(element.numcasos)
           })
+
+          // Guardamos la última fecha con información si se trata de la consulta del total. En caso contrario.
+          // generamos un registro con 0 desde el último dia con datos para el municipio y el último día con
+          // datos del global. Así se hace evidente que hay días sin nuevos casos, en lugar de que la última 
+          // información está desactualizada.
+          if (municipio == "") {
+            this.ultima_fecha = fechaControl
+          } else {
+            while (date_diff_indays(this.ultima_fecha, fechaActual)) {
+              this.labels.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
+              this.dataset.push(0)
+              fechaActual.setDate(fechaActual.getDate()+1);
+            }
+            this.labels.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
+            this.dataset.push(0)
+          }
         })
       },
 
