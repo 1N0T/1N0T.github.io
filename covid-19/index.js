@@ -1,6 +1,3 @@
-Vue.use(VueCharts);
-
-
 new Vue({
   el: '#app',
   data: {
