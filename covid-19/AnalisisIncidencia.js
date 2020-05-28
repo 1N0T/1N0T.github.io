@@ -36,8 +36,12 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
   Ficha de datos
   =======================================================================================-->
   <div class="w3-container w3-rest ficha" :style="{height: windowHeight - 38 +'px'}">
-    <chartjs-bar :datalabel="datalabel" :labels="labels" :data="dataset" :bind="true"></chartjs-bar>
-  </div>
+    <GChart id="grafico"
+      type="ColumnChart"
+      :data="chartData"
+      :options="chartOptions"
+    />
+    </div>
 </div>
 `    
 ,
@@ -55,11 +59,33 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
           orden: ''
         },        
         lista: [],
-
-        dataentry: null,
-        datalabel: "Positius (PCR + tests ràpids)",
-        labels: [],
-        dataset: [],
+        chartData: [],
+        chartOptions: {
+          isStacked: true,
+          chartArea: {
+            left: 80,
+            top: 38, 
+            bottom: 80, 
+            width:'100%',
+            height:'100%'
+          },
+          dataOpacity: 0.5,
+          animation: {"startup": true},
+          bar: {groupWidth: "85%"},
+          legend: 'top',
+          title: '',
+          colors: ['teal', 'red', 'orange'],
+          hAxis: {
+            textStyle: { 
+              color: '#757575',
+            }   
+          },
+          vAxis: {
+            textStyle: { 
+              color: '#757575',
+            }   
+          },
+        },        
         ultima_fecha: null
       }
 
@@ -95,20 +121,22 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
         let fechaActual = ""
         let fechaControl = ""
         let condicion = ""
+        this.chartData = [
+          ["Data", "PCR", "Test ràpid", "Sospitós"],
+        ]
 
         if (municipio == "(Total Catalunya)") {
           municipio = ""
         }
         if (municipio.length) {
-          condicion = 'where resultatcoviddescripcio like "Positiu%25" and municipidescripcio = "' + municipio + '" '
+          condicion = 'where municipidescripcio = "' + municipio + '" '
         } else {
-          condicion = 'where resultatcoviddescripcio like "Positiu%25"'
+          condicion = ' '
         }
-        this.labels = []
-        this.dataset = []
-        axios.get("https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos) as numcasos "  + condicion + " group by data order by data ")
+        axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Sospitós", 1, true, 0)) as SOSPITOS '  + condicion + ' group by data order by data' )
         .then((response) => {
           // this.geolocalizacion = response.data.datos.data.geo
+          console.log(response.data)
           response.data.forEach(element => {
             fechaActual = new Date(element.data.substring(0, 4), element.data.substring(5, 7), element.data.substring(8, 10))
             if (fechaEsperada == "") {
@@ -117,13 +145,22 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
             // añadimos un registro con 0 por cada día para los cuales no existen valores, entre la última
             // fecha con valor y la fecha del valor actual
             while (date_diff_indays(fechaActual, fechaEsperada)) {
-              this.labels.push(fechaEsperada.getFullYear() + "-" + this.ceros(fechaEsperada.getMonth(), 2) + "-" + this.ceros(fechaEsperada.getDate(), 2))
-              this.dataset.push(0)
+              datos = []
+              datos.push(fechaEsperada.getFullYear() + "-" + this.ceros(fechaEsperada.getMonth(), 2) + "-" + this.ceros(fechaEsperada.getDate(), 2))
+              datos.push(0)
+              datos.push(0)
+              datos.push(0)
+              this.chartData.push(datos)
               fechaEsperada.setDate(fechaEsperada.getDate()+1);
               fechaControl = fechaActual
+
             }
-            this.labels.push(element.data.substring(0, 10))
-            this.dataset.push(element.numcasos)
+            datos = []
+            datos.push(element.data.substring(0, 10))
+            datos.push(parseInt(element.PCR))
+            datos.push(parseInt(element.RAPID))
+            datos.push(parseInt(element.SOSPITOS))
+            this.chartData.push(datos)
           })
 
           // Guardamos la última fecha con información si se trata de la consulta del total. En caso contrario.
@@ -134,13 +171,21 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
             this.ultima_fecha = fechaControl
           } else {
             while (date_diff_indays(this.ultima_fecha, fechaActual)) {
-              this.labels.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
-              this.dataset.push(0)
+              datos = []
+              datos.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
+              datos.push(0)
+              datos.push(0)
+              datos.push(0)
+              this.chartData.push(datos)
               fechaActual.setDate(fechaActual.getDate()+1);
             }
-            this.labels.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
-            this.dataset.push(0)
-          }
+            datos = []
+            datos.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
+            datos.push(0)
+            datos.push(0)
+            datos.push(0)
+            this.chartData.push(datos)
+        }
         })
       },
 
