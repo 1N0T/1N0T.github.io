@@ -135,8 +135,7 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
         }
         axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Sospitós", 1, true, 0)) as SOSPITOS '  + condicion + ' group by data order by data' )
         .then((response) => {
-          // this.geolocalizacion = response.data.datos.data.geo
-          console.log(response.data)
+          //console.log(response.data)
           response.data.forEach(element => {
             fechaActual = new Date(element.data.substring(0, 4), element.data.substring(5, 7), element.data.substring(8, 10))
             if (fechaEsperada == "") {
