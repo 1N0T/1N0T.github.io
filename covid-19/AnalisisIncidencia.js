@@ -69,12 +69,13 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
             width:'100%',
             height:'100%'
           },
-          dataOpacity: 0.5,
+          dataOpacity: 1,
           animation: {"startup": true},
           bar: {groupWidth: "85%"},
           legend: 'top',
           title: '',
-          colors: ['teal', 'red', 'orange'],
+          colors: ['#0010aa', 'orange', '#00aabb'],
+          backgroundColor: "",
           hAxis: {
             textStyle: { 
               color: '#757575',
@@ -135,7 +136,6 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
         }
         axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Sospitós", 1, true, 0)) as SOSPITOS '  + condicion + ' group by data order by data' )
         .then((response) => {
-          //console.log(response.data)
           response.data.forEach(element => {
             fechaActual = new Date(element.data.substring(0, 4), element.data.substring(5, 7), element.data.substring(8, 10))
             if (fechaEsperada == "") {
@@ -184,7 +184,7 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
             datos.push(0)
             datos.push(0)
             this.chartData.push(datos)
-        }
+          }
         })
       },
 
