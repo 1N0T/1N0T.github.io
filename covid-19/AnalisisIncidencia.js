@@ -9,7 +9,7 @@ const AnalisisIncidencia = Vue.component('analisisIncidenciaComponent', {
     <div class="w3-col lista" :style="{height: windowHeight - 38 +'px', width: anchoLista + 'px'}">
       <div class=w3-row>
         <div class="w3-col m12 cf">
-          <input class="w3-input w3-border" type="text" v-model="filtroLista" placeholder="Municipi ...">
+          <input class="w3-input w3-border" id="busqueda" type="text" v-model="filtroLista" placeholder="Municipi ...">
         </div>
       </div>
       <div class=w3-row>
