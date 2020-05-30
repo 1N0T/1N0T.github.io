@@ -1,7 +1,7 @@
 .gradiente {
     color: white;
     background: #000080; /* Para exploradores que no soportan gradientes */
-    background: linear-gradient(128deg, rgba(0,0,128,1) 20%, rgba(0,0,128,0.128));
+    background: linear-gradient(128deg, rgba(0,128,128,1) 20%, rgba(0,0,128,0.128));
     min-height: 38px;
 }
 #logo {
@@ -65,7 +65,7 @@
 }
 .lista {
   position: relative;
-  background-color: beige;   
+  background-color: rgba(0,128,128,0.05);   
   float: left;
   overflow-y: auto;
 }
@@ -81,7 +81,7 @@
 .container {
     width:100%;
     height: 100%;
-}
+  }
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -91,6 +91,10 @@ body {
   margin: 0px;
   padding: 0px;
   color: teal;  
+  background-image: url(/images/fondo.svg);
+  background-position:center center;
+  background-repeat:no-repeat;
+  background-size: cover;
 }
 html,body {
     height:100%;
