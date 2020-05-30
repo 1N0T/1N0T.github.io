@@ -10,6 +10,13 @@
   right: 10px;
   z-index: 99;
 }
+#virus {
+  position: fixed;
+  top: 5px;
+  left: 10px;
+  width: 30px;
+  z-index: 99;
+}
 #menu {
     position: fixed;
     color: white;
@@ -69,6 +76,11 @@
   float: left;
   overflow-y: auto;
 }
+#busqueda {
+  border: 0;
+  background-color: rgba(0,128,128,0.1);   
+}
+
 .listacontent {
     display: block;
     height: 400px;
