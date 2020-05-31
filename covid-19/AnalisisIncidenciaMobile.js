@@ -135,6 +135,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
           ["Data", "PCR", "Test ràpid", "Sospitós"],
         ]
         this.municipioSeleccionado = municipio
+        this.listaAbierta = false
  
         if (municipio == "(Total Catalunya)") {
           municipio = ""
@@ -170,7 +171,6 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
             datos.push(parseInt(element.RAPID))
             datos.push(parseInt(element.SOSPITOS))
             this.chartData.push(datos)
-            this.listaAbierta = false
           })
 
           // Guardamos la última fecha con información si se trata de la consulta del total. En caso contrario.
