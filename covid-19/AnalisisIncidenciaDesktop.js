@@ -1,4 +1,4 @@
-const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', { 
+const AnalisisIncidenciaDesktop = Vue.component('analisisIncidenciaComponent', { 
   template: `
   <div>
   <!--
@@ -6,35 +6,41 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
   Botonera
   =======================================================================================-->
   <div class="botonera">
-    <div>
-      <i class="fa fa-list w3-xlarge" @click="listaAbierta = !listaAbierta"></i>
-      <span style="margin-left: 10px">{{ municipioSeleccionado }}</span>
-    </div>
+    <center>
+      <div>
+        {{ municipioSeleccionado }}
+      </div>
+    </center>
   </div>
-
   <!--
   =======================================================================================
   Lista de elementos
   =======================================================================================-->
   <div class="w3-row w3-text-teal">
-    <div class="w3-col lista" v-show="listaAbierta" :style="{height: windowHeight - 38 +'px', width: '100%'}">
+    <div class="w3-col lista" :style="{height: windowHeight - 38 +'px', width: anchoLista + 'px'}">
       <div class=w3-row>
         <div class="w3-col m12 cf">
           <input class="w3-input w3-border" id="busqueda" type="text" v-model="filtroLista" placeholder="Municipi ...">
         </div>
       </div>
       <div class=w3-row>
-        <div class="w3-col m12 cf" @click="ordenarLista('municipio')">
+        <div class="w3-col m3 cf" @click="ordenarLista('numorden')">
+          <b>Casos</b> 
+          <span v-if="ordenLista.columna == 'numorden' && ordenLista.orden == 'asc'" ><i class="fa fa-caret-up"></span> 
+          <span v-if="ordenLista.columna == 'numorden' && ordenLista.orden == 'desc'"><i class="fa fa-caret-down"></span>
+        </div>
+        <div class="w3-col m9 cf" @click="ordenarLista('municipio')">
           <b>Municipi</b>
           <span v-if="ordenLista.columna == 'municipio' && ordenLista.orden == 'asc'" ><i class="fa fa-caret-up"></span> 
           <span v-if="ordenLista.columna == 'municipio' && ordenLista.orden == 'desc'"><i class="fa fa-caret-down"></span>
         </div>
       </div>
-      <div class="listacontent" :style="{height: windowHeight - 150 +'px', width: '100%'}">
+      <div class="listacontent" :style="{height: windowHeight - 150 +'px', width: anchoLista + 'px'}">
       <div class="w3-row w3-hover-orange"
            v-for="item in listaFiltrada" :key="item.municipio" 
            :class="{ 'w3-pink': (item.municipio == municipioSeleccionado) }" @click="cargarMunicipio(item.municipio)">
-        <div class="w3-col m10 cf">{{ item.municipio }} ({{ item.positivos }})</div>
+        <div class="w3-col m3 cf">{{ item.positivos }}</div>
+        <div class="w3-col m9 cf">{{ item.municipio }}</div>
       </div>
     </div>
   </div>
@@ -42,14 +48,14 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
   =======================================================================================
   Ficha de datos
   =======================================================================================-->
-  <div class="w3-container w3-rest ficha" v-show="!listaAbierta" :style="{height: windowHeight - 38 +'px'}">
-  <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-xlarge w3-display-middle" v-show="trabajando"></i>
-  <GChart id="grafico"
-      type="ColumnChart"
-      :data="chartData"
-      :options="chartOptions" v-show="!trabajando"
-    />
-  </div>
+  <div class="w3-container w3-rest ficha" :style="{height: windowHeight - 38 +'px'}">
+    <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-xlarge w3-display-middle" v-show="trabajando"></i>
+    <GChart id="grafico"
+        type="ColumnChart"
+        :data="chartData"
+        :options="chartOptions" v-show="!trabajando"
+      />
+    </div>
 </div>
 `    
 ,
@@ -62,7 +68,6 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         
         anchoLista: 350,
         filtroLista: '',
-        listaAbierta: false,
         ordenLista: {
           columna: '',
           orden: ''
@@ -138,8 +143,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         ]
         this.municipioSeleccionado = municipio
         this.trabajando = true
-        this.listaAbierta = false
- 
+
         if (municipio == "(Total Catalunya)") {
           municipio = ""
         }
@@ -200,7 +204,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
             this.chartData.push(datos)
           }
           this.trabajando = false
-        })
+         })
       },
 
       ordenarLista(columna) {
