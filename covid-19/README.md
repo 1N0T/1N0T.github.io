@@ -13,3 +13,5 @@ El origen de los datos es:
 https://analisi.transparenciacatalunya.cat/
 
 Y el la referencia del juego de datos **jj6z-iyrp**.
+
+El virus que aparece en el fondo de la aplicación es una modificación de uno publicado en https://www.flaticon.es/autores/freepik
