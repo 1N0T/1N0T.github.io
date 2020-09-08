@@ -7,8 +7,16 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
   =======================================================================================-->
   <div class="botonera">
     <div>
-      <i class="fa fa-list w3-xlarge" @click="listaAbierta = !listaAbierta"></i>
-      <span style="margin-left: 10px">{{ municipioSeleccionado }}</span>
+      <div class="w3-row">
+        <div class="w3-col" style="width:50px">
+          <i class="fa fa-list w3-xlarge" @click="listaAbierta = !listaAbierta"></i>
+        </div>
+        <div class="w3-rest">
+          {{ municipioSeleccionado }}
+          <input id="dias" type="number" v-model="dias">
+          dies
+        </div>
+      </div>
     </div>
   </div>
 
@@ -46,7 +54,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
   <i class="fa fa-refresh fa-spin fa-3x fa-fw w3-xlarge w3-display-middle" v-show="trabajando"></i>
   <GChart id="grafico"
       type="ColumnChart"
-      :data="chartData"
+      :data="diasSeleccionados"
       :options="chartOptions" v-show="!trabajando"
     />
   </div>
@@ -63,6 +71,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         anchoLista: 350,
         filtroLista: '',
         listaAbierta: false,
+        dias: 60,
         ordenLista: {
           columna: '',
           orden: ''
@@ -129,13 +138,8 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
       },
 
       cargarMunicipio(municipio) {
-        let fechaEsperada = ""
-        let fechaActual = ""
-        let fechaControl = ""
         let condicion = ""
-        this.chartData = [
-          ["Data", "PCR", "Test ràpid", "Sospitós"],
-        ]
+        this.chartData = []
         this.municipioSeleccionado = municipio
         this.trabajando = true
         this.listaAbierta = false
@@ -151,23 +155,6 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Sospitós", 1, true, 0)) as SOSPITOS '  + condicion + ' group by data order by data' )
         .then((response) => {
           response.data.forEach(element => {
-            fechaActual = new Date(element.data.substring(0, 4), element.data.substring(5, 7), element.data.substring(8, 10))
-            if (fechaEsperada == "") {
-               fechaEsperada = fechaActual
-            }
-            // añadimos un registro con 0 por cada día para los cuales no existen valores, entre la última
-            // fecha con valor y la fecha del valor actual
-            while (date_diff_indays(fechaActual, fechaEsperada)) {
-              datos = []
-              datos.push(fechaEsperada.getFullYear() + "-" + this.ceros(fechaEsperada.getMonth(), 2) + "-" + this.ceros(fechaEsperada.getDate(), 2))
-              datos.push(0)
-              datos.push(0)
-              datos.push(0)
-              this.chartData.push(datos)
-              fechaEsperada.setDate(fechaEsperada.getDate()+1);
-              fechaControl = fechaActual
-
-            }
             datos = []
             datos.push(element.data.substring(0, 10))
             datos.push(parseInt(element.PCR))
@@ -176,29 +163,6 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
             this.chartData.push(datos)
           })
 
-          // Guardamos la última fecha con información si se trata de la consulta del total. En caso contrario.
-          // generamos un registro con 0 desde el último dia con datos para el municipio y el último día con
-          // datos del global. Así se hace evidente que hay días sin nuevos casos, en lugar de que la última 
-          // información está desactualizada.
-          if (municipio == "") {
-            this.ultima_fecha = fechaControl
-          } else {
-            while (date_diff_indays(this.ultima_fecha, fechaActual)) {
-              datos = []
-              datos.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
-              datos.push(0)
-              datos.push(0)
-              datos.push(0)
-              this.chartData.push(datos)
-              fechaActual.setDate(fechaActual.getDate()+1);
-            }
-            datos = []
-            datos.push(fechaActual.getFullYear() + "-" + this.ceros(fechaActual.getMonth(), 2) + "-" + this.ceros(fechaActual.getDate(), 2))
-            datos.push(0)
-            datos.push(0)
-            datos.push(0)
-            this.chartData.push(datos)
-          }
           this.trabajando = false
         })
       },
@@ -235,7 +199,12 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
           let aBuscar = this.filtroLista
           return searchIgnoringAccents(cadena, aBuscar)
         })
+      },
+      diasSeleccionados() {
+        return [["Data", "PCR", "Test ràpid", "Sospitós"]].concat(this.chartData.slice(this.dias * -1))
       }    
+
+
     },
     
     mounted() {
