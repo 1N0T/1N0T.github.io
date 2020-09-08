@@ -33,6 +33,9 @@
   padding: 0px;
   margin: 0px;
 }
+#dias {
+  width: 5em;
+}
 
 .titulo {
   position: fixed;
