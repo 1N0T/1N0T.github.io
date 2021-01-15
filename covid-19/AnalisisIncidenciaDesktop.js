@@ -200,7 +200,7 @@ const AnalisisIncidenciaDesktop = Vue.component('analisisIncidenciaComponent', {
         })
       },
       diasSeleccionados() {
-        return [["Data", "PCR", "Test ràpid", "Sospitós"]].concat(this.chartData.slice(this.dias * -1))
+        return [["Data", "PCR", "Test ràpid", "Test Antigènic Ràpid"]].concat(this.chartData.slice(this.dias * -1))
       }    
     
     },
