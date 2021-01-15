@@ -152,14 +152,14 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         } else {
           condicion = ' '
         }
-        axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Sospitós", 1, true, 0)) as SOSPITOS '  + condicion + ' group by data order by data' )
+        axios.get('https://analisi.transparenciacatalunya.cat/resource/jj6z-iyrp.json?$query=select data, sum(numcasos * case(resultatcoviddescripcio="Positiu PCR", 1, true, 0)) as PCR, sum(numcasos * case(resultatcoviddescripcio="Positiu per Test Ràpid", 1, true, 0)) as RAPID, sum(numcasos * case(resultatcoviddescripcio="Positiu TAR", 1, true, 0)) as TAR '  + condicion + ' group by data order by data' )
         .then((response) => {
           response.data.forEach(element => {
             datos = []
             datos.push(element.data.substring(0, 10))
             datos.push(parseInt(element.PCR))
             datos.push(parseInt(element.RAPID))
-            datos.push(parseInt(element.SOSPITOS))
+            datos.push(parseInt(element.TAR))
             this.chartData.push(datos)
           })
 
@@ -201,7 +201,7 @@ const AnalisisIncidenciaMobile = Vue.component('analisisIncidenciaComponent', {
         })
       },
       diasSeleccionados() {
-        return [["Data", "PCR", "Test ràpid", "Sospitós"]].concat(this.chartData.slice(this.dias * -1))
+        return [["Data", "PCR", "Test ràpid", "Test Antigènic Ràpid"]].concat(this.chartData.slice(this.dias * -1))
       }    
 
 
